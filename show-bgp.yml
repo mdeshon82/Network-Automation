@@ -1,0 +1,13 @@
+---
+- name: Check BGP Status
+  hosts: all
+  connection: network_cli
+  gather_facts: no
+  tasks:
+    - name: Run show ip bgp summary
+      cisco.ios.ios_command:
+        commands: show ip bgp summary
+      register: bgp_output
+    - name: Display BGP summary
+      debug:
+        var: bgp_output.stdout_lines

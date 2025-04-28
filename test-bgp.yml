@@ -1,0 +1,35 @@
+---
+- name: Configure BGP on Cisco vIOS Routers
+  hosts: all
+  connection: network_cli
+  gather_facts: no
+  tasks:
+    - name: Configure BGP on R1
+      cisco.ios.ios_bgp:
+        config:
+          bgp_as: 65001
+          router_id: 1.1.1.1
+          neighbors:
+            - neighbor: 2.2.2.2
+              remote_as: 65001
+              update_source: Loopback0
+          networks:
+            - network: 1.1.1.1
+              mask: 255.255.255.255
+        state: merged
+      when: inventory_hostname == "172.18.31.25"
+
+    - name: Configure BGP on R2
+      cisco.ios.ios_bgp:
+        config:
+          bgp_as: 65001
+          router_id: 2.2.2.2
+          neighbors:
+            - neighbor: 1.1.1.1
+              remote_as: 65001
+              update_source: Loopback0
+          networks:
+            - network: 2.2.2.2
+              mask: 255.255.255.255
+        state: merged
+      when: inventory_hostname == "172.18.31.26"

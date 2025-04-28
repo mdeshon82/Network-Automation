@@ -1,0 +1,14 @@
+---
+- name: Display IP Interface Brief on Cisco vIOS Routers
+  hosts: all
+  connection: network_cli
+  gather_facts: no
+  tasks:
+    - name: Run show ip interface brief
+      cisco.ios.ios_command:
+        commands: show ip interface brief
+      register: output
+
+    - name: Display command output
+      debug:
+        var: output.stdout_lines
